@@ -37,48 +37,36 @@ LABELS = [
 
 MODEL_PATH = "survey_model.onnx"
 TOP_K = 17
+T = 2.0
+THRESHOLD = 0.3
 
 
 def get_user_responses():
-    """콘솔에서 1~5 정수 응답 10개를 순차적으로 입력받아 numpy 배열로 반환."""
     resp = []
-    print("설문에 답해 주세요 (1~5 사이의 숫자로 입력):")
     for q in QUESTIONS:
-        while True:
-            try:
-                val = int(input(f"{q} (1-5): ").strip())
-                if 1 <= val <= 5:
-                    resp.append(val)
-                    break
-                else:
-                    print("▶ 1부터 5까지만 입력 가능합니다.")
-            except ValueError:
-                print("▶ 숫자를 입력해 주세요.")
+        val = int(input(f"{q} (1-5): "))
+        resp.append(val)
     return np.array(resp, dtype=np.float32).reshape(1, -1)
 
 
 def load_model_session(path):
-    """ONNX 세션을 한 번만 만들고 재활용하기 위해 분리."""
     sess = ort.InferenceSession(path, providers=["CPUExecutionProvider"])
     return sess, sess.get_inputs()[0].name, sess.get_outputs()[0].name
 
 
-def predict_top_categories(session, input_name, output_name, responses, top_k=TOP_K):
-    """모델 추론 → sigmoid → 상위 top_k 라벨 반환."""
-    logits = session.run([output_name], {input_name: responses})[0][0]
-    probs = 1 / (1 + np.exp(-logits))
-
-    top_idxs = np.argsort(probs)[::-1][:top_k]
-    return [(LABELS[i], probs[i]) for i in top_idxs]
+def predict_top_categories(session, in_name, out_name, responses, top_k=TOP_K):
+    logits = session.run([out_name], {in_name: responses})[0][0]
+    probs = 1 / (1 + np.exp(-logits / T))
+    idxs = np.where(probs >= THRESHOLD)[0]
+    idxs = idxs[np.argsort(probs[idxs])[::-1]][:top_k]
+    return [(LABELS[i], probs[i]) for i in idxs]
 
 
 def main():
-    responses = get_user_responses()
-    session, in_name, out_name = load_model_session(MODEL_PATH)
-    top3 = predict_top_categories(session, in_name, out_name, responses, TOP_K)
-
-    print("\n📋 추천 영양제 카테고리 (중요도 순):")
-    for cat, score in top3:
+    resp = get_user_responses()
+    sess, in_name, out_name = load_model_session(MODEL_PATH)
+    preds = predict_top_categories(sess, in_name, out_name, resp)
+    for cat, score in preds:
         print(f" - {cat}: {score:.2f}")
 
 

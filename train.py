@@ -5,7 +5,6 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 
-
 CSV_PATH = "survey_labels.csv"
 FEATURE_COLUMNS = [f"Q{i}" for i in range(1, 11)]
 LABEL_COLUMNS = [
@@ -27,11 +26,13 @@ LABEL_COLUMNS = [
     "루테인",
     "비타민A",
 ]
-BATCH_SIZE = 32
-LR = 1e-3
-WEIGHT_DECAY = 1e-5
-NUM_EPOCHS = 100
-HIDDEN_DIM = 1024
+BATCH_SIZE = 64
+LR = 5e-4
+WEIGHT_DECAY = 1e-4
+NUM_EPOCHS = 200
+HIDDEN_DIM1 = 256
+HIDDEN_DIM2 = 128
+PATIENCE = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -39,7 +40,31 @@ class SurveyDataset(Dataset):
     def __init__(self, csv_path):
         df = pd.read_csv(csv_path)
         self.X = df[FEATURE_COLUMNS].values.astype(np.float32)
-        self.y = df[LABEL_COLUMNS].values.astype(np.float32)
+        question_to_cats = {
+            1: ["비타민C", "멀티비타민", "철분", "오메가3", "마그네슘"],
+            2: ["칼슘", "비타민D", "마그네슘", "콜라겐"],
+            3: ["마그네슘", "오메가3", "비타민D", "프로바이오틱스"],
+            4: ["프로바이오틱스", "차전자피 식이섬유", "밀크씨슬"],
+            5: ["비타민C", "아연", "셀레늄", "비타민D"],
+            6: ["콜라겐", "비타민A", "비타민C", "셀레늄"],
+            7: ["루테인", "오메가3", "비타민A"],
+            8: ["엽산", "철분", "멀티비타민"],
+            9: ["오메가3", "멀티비타민", "셀레늄"],
+            10: ["비타민C", "셀레늄", "루테인", "밀크씨슬"],
+        }
+        label_idx = {lbl: i for i, lbl in enumerate(LABEL_COLUMNS)}
+        n = len(self.X)
+        self.y = np.zeros((n, len(LABEL_COLUMNS)), dtype=np.float32)
+        for i in range(n):
+            sums = np.zeros(len(LABEL_COLUMNS), dtype=np.float32)
+            counts = np.zeros(len(LABEL_COLUMNS), dtype=np.int32)
+            for q_idx in range(len(FEATURE_COLUMNS)):
+                norm = (self.X[i, q_idx] - 1) / 4
+                for cat in question_to_cats[q_idx + 1]:
+                    j = label_idx[cat]
+                    sums[j] += norm
+                    counts[j] += 1
+            self.y[i] = sums / (counts + 1e-8)
 
     def __len__(self):
         return len(self.X)
@@ -49,92 +74,76 @@ class SurveyDataset(Dataset):
 
 
 class ImprovedMLP(nn.Module):
-    def __init__(self, input_dim, hidden_dim, output_dim):
+    def __init__(self, input_dim, h1, h2, output_dim):
         super().__init__()
-        self.block1 = nn.Sequential(
-            nn.Linear(input_dim, hidden_dim),
-            nn.BatchNorm1d(hidden_dim),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-        )
-        self.block2 = nn.Sequential(
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.BatchNorm1d(hidden_dim),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-        )
-        self.block3 = nn.Sequential(
-            nn.Linear(hidden_dim, hidden_dim // 2),
-            nn.BatchNorm1d(hidden_dim // 2),
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, h1),
             nn.ReLU(),
             nn.Dropout(0.2),
+            nn.Linear(h1, h2),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(h2, output_dim),
         )
-        self.classifier = nn.Linear(hidden_dim // 2, output_dim)
 
     def forward(self, x):
-        x = self.block1(x)
-        residual = x
-        x = self.block2(x)
-        x = x + residual
-        x = self.block3(x)
-        return self.classifier(x)
+        return self.net(x)
 
 
 def train():
-
-    dataset = SurveyDataset(CSV_PATH)
-    train_size = int(len(dataset) * 0.8)
-    val_size = len(dataset) - train_size
-    train_ds, val_ds = torch.utils.data.random_split(dataset, [train_size, val_size])
+    ds = SurveyDataset(CSV_PATH)
+    n_train = int(len(ds) * 0.8)
+    train_ds, val_ds = torch.utils.data.random_split(ds, [n_train, len(ds) - n_train])
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE)
 
-    model = ImprovedMLP(len(FEATURE_COLUMNS), HIDDEN_DIM, len(LABEL_COLUMNS)).to(DEVICE)
+    model = ImprovedMLP(
+        len(FEATURE_COLUMNS), HIDDEN_DIM1, HIDDEN_DIM2, len(LABEL_COLUMNS)
+    ).to(DEVICE)
     criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="min", factor=0.5, patience=5, verbose=True
     )
 
+    best_val, no_imp = float("inf"), 0
     for epoch in range(1, NUM_EPOCHS + 1):
         model.train()
-        train_loss = 0.0
-        for X_batch, y_batch in train_loader:
-            X_batch, y_batch = X_batch.to(DEVICE), y_batch.to(DEVICE)
+        tl = 0
+        for X, y in train_loader:
+            X, y = X.to(DEVICE), y.to(DEVICE)
             optimizer.zero_grad()
-            logits = model(X_batch)
-            loss = criterion(logits, y_batch)
+            loss = criterion(model(X), y)
             loss.backward()
             optimizer.step()
-            train_loss += loss.item()
-        avg_train = train_loss / len(train_loader)
-
+            tl += loss.item()
         model.eval()
-        val_loss = 0.0
+        mv = 0
         with torch.no_grad():
-            for X_batch, y_batch in val_loader:
-                X_batch, y_batch = X_batch.to(DEVICE), y_batch.to(DEVICE)
-                logits = model(X_batch)
-                loss = criterion(logits, y_batch)
-                val_loss += loss.item()
-        avg_val = val_loss / len(val_loader)
-        scheduler.step(avg_val)
+            for X, y in val_loader:
+                X, y = X.to(DEVICE), y.to(DEVICE)
+                mv += criterion(model(X), y).item()
+        avg_v = mv / len(val_loader)
+        scheduler.step(avg_v)
+        print(f"Epoch {epoch}/{NUM_EPOCHS} - val_loss: {avg_v:.4f}")
+        if avg_v < best_val:
+            best_val, no_imp = avg_v, 0
+        else:
+            no_imp += 1
+            if no_imp >= PATIENCE:
+                print("Early stopping")
+                break
 
-        print(
-            f"Epoch {epoch}/{NUM_EPOCHS} - train_loss: {avg_train:.4f} - val_loss: {avg_val:.4f} - lr: {optimizer.param_groups[0]['lr']:.2e}"
-        )
-
-    dummy_input = torch.randn(1, len(FEATURE_COLUMNS)).to(DEVICE)
+    dummy = torch.randn(1, len(FEATURE_COLUMNS)).to(DEVICE)
     torch.onnx.export(
         model,
-        dummy_input,
+        dummy,
         "survey_model.onnx",
         input_names=["input"],
         output_names=["output"],
         dynamic_axes={"input": {0: "batch"}, "output": {0: "batch"}},
         opset_version=11,
     )
-    print("ONNX model saved as survey_model.onnx")
 
 
 if __name__ == "__main__":
