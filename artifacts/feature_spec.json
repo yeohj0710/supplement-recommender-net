@@ -1,0 +1,221 @@
+{
+  "factors": [
+    {
+      "name": "f_age",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 37.75233333333333,
+      "sigma": 11.565595306203113
+    },
+    {
+      "name": "f_is_male",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 0.4886666666666667,
+      "sigma": 0.49987154905334075
+    },
+    {
+      "name": "f_height_cm",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 168.23956666666666,
+      "sigma": 8.750815846950417
+    },
+    {
+      "name": "f_weight_kg",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 66.95196666666666,
+      "sigma": 11.583407516668993
+    },
+    {
+      "name": "f_bmi",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 23.587333333333333,
+      "sigma": 3.2304416034805086
+    },
+    {
+      "name": "f_pregnant",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 0.03133333333333333,
+      "sigma": 0.17421698837913374
+    },
+    {
+      "name": "f_screen_time",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 3.449333333333333,
+      "sigma": 0.9913456723308655
+    },
+    {
+      "name": "f_eye_fatigue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.7303333333333333,
+      "sigma": 1.0851788995026581
+    },
+    {
+      "name": "f_sleep_quality",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 3.042,
+      "sigma": 1.0176292810674812
+    },
+    {
+      "name": "f_stress_level",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 3.090333333333333,
+      "sigma": 1.001418947752272
+    },
+    {
+      "name": "f_digest_issue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.813,
+      "sigma": 1.0063288164378692
+    },
+    {
+      "name": "f_immune_low",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.8966666666666665,
+      "sigma": 1.0148836924429137
+    },
+    {
+      "name": "f_skin_issue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.684,
+      "sigma": 1.0146316344496489
+    },
+    {
+      "name": "f_hair_loss",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.76,
+      "sigma": 1.0028625795145538
+    },
+    {
+      "name": "f_joint_pain",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.5946666666666665,
+      "sigma": 1.0091439816688375
+    },
+    {
+      "name": "f_bone_concern",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.4943333333333335,
+      "sigma": 0.999983954315552
+    },
+    {
+      "name": "f_lipid_issue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.720666666666667,
+      "sigma": 1.01946370343014
+    },
+    {
+      "name": "f_bp_issue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.5023333333333335,
+      "sigma": 0.9923009836074144
+    },
+    {
+      "name": "f_blood_sugar_issue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.404333333333333,
+      "sigma": 0.980908375864122
+    },
+    {
+      "name": "f_sun_exposure_low",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.994666666666667,
+      "sigma": 1.0822684096536574
+    },
+    {
+      "name": "f_fish_intake_low",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.998666666666667,
+      "sigma": 1.0927022668944488
+    },
+    {
+      "name": "f_alcohol_freq",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.026666666666667,
+      "sigma": 1.2252709550929164
+    },
+    {
+      "name": "f_caffeine_sensitive",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 0.31066666666666665,
+      "sigma": 0.46276656982135195
+    },
+    {
+      "name": "f_vegan",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 0.08933333333333333,
+      "sigma": 0.28522428822485396
+    },
+    {
+      "name": "f_low_dairy",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 0.19833333333333333,
+      "sigma": 0.3987445676082791
+    },
+    {
+      "name": "f_activity_low",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.895,
+      "sigma": 1.0305217225320553
+    },
+    {
+      "name": "f_memory_concern",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.6786666666666665,
+      "sigma": 1.038626453380337
+    },
+    {
+      "name": "f_circulation_issue",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.759,
+      "sigma": 1.0261184242193335
+    },
+    {
+      "name": "f_weight_goal",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.8233333333333333,
+      "sigma": 0.9980592378127697
+    },
+    {
+      "name": "f_fiber_low",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 3.065,
+      "sigma": 1.015270909809504
+    },
+    {
+      "name": "f_mineral_def_signs",
+      "kind": "num",
+      "pool": "mean",
+      "mu": 2.6986666666666665,
+      "sigma": 0.9841400181063444
+    }
+  ]
+}

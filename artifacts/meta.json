@@ -1,0 +1,30 @@
+{
+  "feature_prefix": "f_",
+  "label_prefix": "y_",
+  "input_dim": 31,
+  "z_dim": 16,
+  "labels": [
+    "psyllium_fiber",
+    "minerals",
+    "vitamin_a",
+    "iron",
+    "phosphatidylserine",
+    "folic_acid",
+    "arginine",
+    "chondroitin",
+    "coq10",
+    "collagen",
+    "vitamin_c",
+    "omega3",
+    "calcium",
+    "lutein",
+    "vitamin_d",
+    "milk_thistle",
+    "probiotics",
+    "vitamin_b",
+    "magnesium",
+    "garcinia",
+    "multivitamin",
+    "zinc"
+  ]
+}
