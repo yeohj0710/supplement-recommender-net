@@ -1,0 +1,693 @@
+{
+  "mode": "two_stage",
+  "top_n_modules": 3,
+  "demographics": [
+    {
+      "id": "q_age",
+      "kind": "number",
+      "text": "나이를 입력하세요(만 나이).",
+      "min": 18,
+      "max": 80,
+      "featureKey": "f_age"
+    },
+    {
+      "id": "q_gender",
+      "kind": "single",
+      "text": "성별을 선택하세요.",
+      "options": [
+        { "id": "m", "text": "남성", "value": 1 },
+        { "id": "f", "text": "여성", "value": 0 }
+      ],
+      "featureKey": "f_is_male"
+    },
+    {
+      "id": "q_height",
+      "kind": "number",
+      "text": "키(cm)를 입력하세요.",
+      "min": 140,
+      "max": 210,
+      "featureKey": "f_height_cm"
+    },
+    {
+      "id": "q_weight",
+      "kind": "number",
+      "text": "체중(kg)을 입력하세요.",
+      "min": 35,
+      "max": 160,
+      "featureKey": "f_weight_kg"
+    },
+    {
+      "id": "q_pregnant",
+      "kind": "boolean",
+      "text": "임신/임신 계획 또는 수유 중인가요?",
+      "featureKey": "f_pregnant"
+    }
+  ],
+  "screening": [
+    {
+      "id": "s_eye",
+      "kind": "likert",
+      "text": "눈 피로/시야 흐림이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_eye_fatigue",
+      "domain": "eye",
+      "weight": 1
+    },
+    {
+      "id": "s_hair",
+      "kind": "likert",
+      "text": "탈모/모발 문제가 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_hair_loss",
+      "domain": "hair",
+      "weight": 1
+    },
+    {
+      "id": "s_circ",
+      "kind": "likert",
+      "text": "혈액순환이 잘 안 되는 것 같습니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_circulation_issue",
+      "domain": "circulation",
+      "weight": 1
+    },
+    {
+      "id": "s_joint",
+      "kind": "likert",
+      "text": "관절 통증/뻣뻣함이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_joint_pain",
+      "domain": "joints",
+      "weight": 1
+    },
+    {
+      "id": "s_skin",
+      "kind": "likert",
+      "text": "피부 트러블/탄력 저하가 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_skin_issue",
+      "domain": "skin",
+      "weight": 1
+    },
+    {
+      "id": "s_digest",
+      "kind": "likert",
+      "text": "소화 불편/변비·복통이 잦습니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_digest_issue",
+      "domain": "digest",
+      "weight": 1
+    },
+    {
+      "id": "s_immune",
+      "kind": "likert",
+      "text": "면역이 약해 자주 아픕니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_immune_low",
+      "domain": "immunity",
+      "weight": 1
+    },
+    {
+      "id": "s_bone",
+      "kind": "likert",
+      "text": "뼈 건강이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_bone_concern",
+      "domain": "bone",
+      "weight": 1
+    },
+    {
+      "id": "s_lipid",
+      "kind": "likert",
+      "text": "지질/콜레스테롤이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_lipid_issue",
+      "domain": "lipid",
+      "weight": 1
+    },
+    {
+      "id": "s_bp",
+      "kind": "likert",
+      "text": "혈압이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_bp_issue",
+      "domain": "bp",
+      "weight": 1
+    },
+    {
+      "id": "s_glucose",
+      "kind": "likert",
+      "text": "혈당이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_blood_sugar_issue",
+      "domain": "glucose",
+      "weight": 1
+    },
+    {
+      "id": "s_weight",
+      "kind": "likert",
+      "text": "체중 관리가 가장 큰 목표입니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_weight_goal",
+      "domain": "weight",
+      "weight": 1
+    },
+    {
+      "id": "s_stress",
+      "kind": "likert",
+      "text": "스트레스가 높습니다.",
+      "options": [
+        { "id": "1", "text": "매우 낮음", "value": 1 },
+        { "id": "2", "text": "낮음", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "높음", "value": 4 },
+        { "id": "5", "text": "매우 높음", "value": 5 }
+      ],
+      "featureKey": "f_stress_level",
+      "domain": "stress",
+      "weight": 1
+    },
+    {
+      "id": "s_sleep",
+      "kind": "likert",
+      "text": "수면의 질이 좋지 않습니다.",
+      "options": [
+        { "id": "1", "text": "매우 좋음", "value": 1 },
+        { "id": "2", "text": "좋음", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "나쁨", "value": 4 },
+        { "id": "5", "text": "매우 나쁨", "value": 5 }
+      ],
+      "featureKey": "f_sleep_quality",
+      "domain": "sleep",
+      "weight": 1
+    },
+    {
+      "id": "s_liver",
+      "kind": "likert",
+      "text": "간 건강이 걱정됩니다.",
+      "options": [
+        { "id": "1", "text": "전혀 아님", "value": 1 },
+        { "id": "2", "text": "가끔", "value": 2 },
+        { "id": "3", "text": "보통", "value": 3 },
+        { "id": "4", "text": "자주", "value": 4 },
+        { "id": "5", "text": "매우 자주", "value": 5 }
+      ],
+      "featureKey": "f_alcohol_freq",
+      "domain": "liver",
+      "weight": 1
+    }
+  ],
+  "modules": {
+    "eye": {
+      "title": "눈",
+      "questions": [
+        {
+          "id": "m_eye_screen",
+          "kind": "likert",
+          "text": "하루 스크린 사용 시간",
+          "options": [
+            { "id": "1", "text": "<2h", "value": 1 },
+            { "id": "2", "text": "2-4h", "value": 2 },
+            { "id": "3", "text": "4-6h", "value": 3 },
+            { "id": "4", "text": "6-8h", "value": 4 },
+            { "id": "5", "text": ">8h", "value": 5 }
+          ],
+          "featureKey": "f_screen_time"
+        }
+      ],
+      "gate": {
+        "features": ["f_eye_fatigue", "f_screen_time"],
+        "threshold": 3.0
+      },
+      "categories": ["lutein", "vitamin_a"]
+    },
+    "hair": {
+      "title": "모발",
+      "questions": [
+        {
+          "id": "m_hair_loss2",
+          "kind": "likert",
+          "text": "최근 3개월간 모발 감소 체감",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_hair_loss"
+        },
+        {
+          "id": "m_mineral_def",
+          "kind": "likert",
+          "text": "무기질 부족 증상(쥐남/피로)",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_mineral_def_signs"
+        }
+      ],
+      "gate": { "features": ["f_hair_loss"], "threshold": 3.0 },
+      "categories": ["zinc", "biotin", "collagen", "vitamin_b"]
+    },
+    "circulation": {
+      "title": "혈액순환",
+      "questions": [
+        {
+          "id": "m_circ1",
+          "kind": "likert",
+          "text": "손발이 차갑다/저림",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_circulation_issue"
+        },
+        {
+          "id": "m_activity",
+          "kind": "likert",
+          "text": "활동량이 낮다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_activity_low"
+        }
+      ],
+      "gate": { "features": ["f_circulation_issue"], "threshold": 3.0 },
+      "categories": ["coq10", "arginine", "omega3"]
+    },
+    "digest": {
+      "title": "소화",
+      "questions": [
+        {
+          "id": "m_digest1",
+          "kind": "likert",
+          "text": "복부 팽만/변비가 잦다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_digest_issue"
+        },
+        {
+          "id": "m_fiber",
+          "kind": "likert",
+          "text": "식이섬유 섭취가 부족하다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_fiber_low"
+        }
+      ],
+      "gate": {
+        "features": ["f_digest_issue", "f_fiber_low"],
+        "threshold": 3.0
+      },
+      "categories": ["probiotics", "psyllium_fiber"]
+    },
+    "immunity": {
+      "title": "면역",
+      "questions": [
+        {
+          "id": "m_immune1",
+          "kind": "likert",
+          "text": "감기/피로가 잦다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_immune_low"
+        },
+        {
+          "id": "m_sleep",
+          "kind": "likert",
+          "text": "수면 질이 낮다",
+          "options": [
+            { "id": "1", "text": "매우 좋음", "value": 1 },
+            { "id": "2", "text": "좋음", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "나쁨", "value": 4 },
+            { "id": "5", "text": "매우 나쁨", "value": 5 }
+          ],
+          "featureKey": "f_sleep_quality"
+        }
+      ],
+      "gate": { "features": ["f_immune_low"], "threshold": 3.0 },
+      "categories": ["vitamin_c", "zinc", "multivitamin", "vitamin_b"]
+    },
+    "bone": {
+      "title": "뼈/관절(뼈)",
+      "questions": [
+        {
+          "id": "m_bone1",
+          "kind": "likert",
+          "text": "골밀도 저하가 걱정된다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_bone_concern"
+        },
+        {
+          "id": "m_sun",
+          "kind": "likert",
+          "text": "햇빛 노출이 부족하다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_sun_exposure_low"
+        }
+      ],
+      "gate": { "features": ["f_bone_concern"], "threshold": 3.0 },
+      "categories": ["calcium", "vitamin_d"]
+    },
+    "joints": {
+      "title": "관절",
+      "questions": [
+        {
+          "id": "m_joint1",
+          "kind": "likert",
+          "text": "계단/활동 시 관절 통증",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_joint_pain"
+        }
+      ],
+      "gate": { "features": ["f_joint_pain"], "threshold": 3.0 },
+      "categories": ["chondroitin", "collagen"]
+    },
+    "lipid": {
+      "title": "지질",
+      "questions": [
+        {
+          "id": "m_lipid1",
+          "kind": "likert",
+          "text": "콜레스테롤/중성지방 걱정",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_lipid_issue"
+        },
+        {
+          "id": "m_fish_low",
+          "kind": "likert",
+          "text": "생선 섭취가 매우 적다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_fish_intake_low"
+        }
+      ],
+      "gate": { "features": ["f_lipid_issue"], "threshold": 3.0 },
+      "categories": ["omega3", "coq10"]
+    },
+    "bp": {
+      "title": "혈압",
+      "questions": [
+        {
+          "id": "m_bp1",
+          "kind": "likert",
+          "text": "혈압이 높거나 변동이 크다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_bp_issue"
+        },
+        {
+          "id": "m_bp_act",
+          "kind": "likert",
+          "text": "활동량이 매우 낮다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_activity_low"
+        }
+      ],
+      "gate": { "features": ["f_bp_issue"], "threshold": 3.0 },
+      "categories": ["coq10", "omega3", "arginine"]
+    },
+    "glucose": {
+      "title": "혈당",
+      "questions": [
+        {
+          "id": "m_glu1",
+          "kind": "likert",
+          "text": "혈당이 자주 높게 나온다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_blood_sugar_issue"
+        }
+      ],
+      "gate": { "features": ["f_blood_sugar_issue"], "threshold": 3.0 },
+      "categories": ["magnesium"]
+    },
+    "stress": {
+      "title": "스트레스",
+      "questions": [
+        {
+          "id": "m_str1",
+          "kind": "likert",
+          "text": "스트레스 수준이 높다",
+          "options": [
+            { "id": "1", "text": "매우 낮음", "value": 1 },
+            { "id": "2", "text": "낮음", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "높음", "value": 4 },
+            { "id": "5", "text": "매우 높음", "value": 5 }
+          ],
+          "featureKey": "f_stress_level"
+        }
+      ],
+      "gate": { "features": ["f_stress_level"], "threshold": 3.0 },
+      "categories": ["magnesium", "vitamin_b", "phosphatidylserine"]
+    },
+    "sleep": {
+      "title": "수면",
+      "questions": [
+        {
+          "id": "m_sleep1",
+          "kind": "likert",
+          "text": "입면/숙면이 어렵다",
+          "options": [
+            { "id": "1", "text": "매우 좋음", "value": 1 },
+            { "id": "2", "text": "좋음", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "나쁨", "value": 4 },
+            { "id": "5", "text": "매우 나쁨", "value": 5 }
+          ],
+          "featureKey": "f_sleep_quality"
+        }
+      ],
+      "gate": { "features": ["f_sleep_quality"], "threshold": 3.0 },
+      "categories": ["magnesium", "vitamin_b", "phosphatidylserine"]
+    },
+    "skin": {
+      "title": "피부",
+      "questions": [
+        {
+          "id": "m_skin1",
+          "kind": "likert",
+          "text": "탄력/건조/주름이 걱정된다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_skin_issue"
+        }
+      ],
+      "gate": { "features": ["f_skin_issue"], "threshold": 3.0 },
+      "categories": ["collagen", "vitamin_c", "vitamin_a"]
+    },
+    "liver": {
+      "title": "간",
+      "questions": [
+        {
+          "id": "m_alc",
+          "kind": "number",
+          "text": "주간 음주일수(0~7)",
+          "min": 0,
+          "max": 7,
+          "featureKey": "f_alcohol_freq"
+        }
+      ],
+      "gate": { "features": ["f_alcohol_freq"], "threshold": 3.0 },
+      "categories": ["milk_thistle"]
+    },
+    "weight": {
+      "title": "체중",
+      "questions": [
+        {
+          "id": "m_weight1",
+          "kind": "likert",
+          "text": "체중 관리가 최우선 목표다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_weight_goal"
+        }
+      ],
+      "gate": { "features": ["f_weight_goal"], "threshold": 3.0 },
+      "categories": ["garcinia", "multivitamin"]
+    },
+    "minerals": {
+      "title": "무기질",
+      "questions": [
+        {
+          "id": "m_min_def",
+          "kind": "likert",
+          "text": "무기질 부족 증상을 느낀다",
+          "options": [
+            { "id": "1", "text": "전혀 아님", "value": 1 },
+            { "id": "2", "text": "가끔", "value": 2 },
+            { "id": "3", "text": "보통", "value": 3 },
+            { "id": "4", "text": "자주", "value": 4 },
+            { "id": "5", "text": "매우 자주", "value": 5 }
+          ],
+          "featureKey": "f_mineral_def_signs"
+        }
+      ],
+      "gate": { "features": ["f_mineral_def_signs"], "threshold": 3.0 },
+      "categories": ["minerals", "magnesium", "zinc"]
+    },
+    "pregnancy": {
+      "title": "임신/수유",
+      "questions": [],
+      "gate": { "features": ["f_pregnant"], "threshold": 0.5 },
+      "categories": ["folic_acid", "iron"]
+    }
+  }
+}
